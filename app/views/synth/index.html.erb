@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEON WAVE — Blueprint Synth</title>
+<style>
+:root{--blue:#286bb2;--cream:#fff7cf;--line:rgba(255,247,207,.48)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--blue);color:var(--cream);font-family:Arial,Helvetica,sans-serif}
+body{background-color:var(--blue);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),linear-gradient(rgba(255,247,207,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(255,247,207,.16) 1px,transparent 1px);background-size:64px 64px,64px 64px,16px 16px,16px 16px}
+.shell{width:min(1440px,96vw);margin:auto;padding:22px 0 34px}
+.dash{border:2px dashed var(--cream);padding:18px}
+.top{display:flex;align-items:center;gap:22px;border-bottom:2px solid var(--cream);padding-bottom:14px;font-weight:900}.brand{font-size:15px;letter-spacing:.12em}.top small{margin-left:auto;font-weight:900;letter-spacing:.08em}.power{border:3px solid var(--cream);background:var(--cream);color:var(--blue);border-radius:30px;padding:10px 24px;font-weight:1000;cursor:pointer}
+.layout{display:grid;grid-template-columns:170px 1fr;gap:22px;padding-top:20px}
+.vertical{writing-mode:vertical-rl;transform:rotate(180deg);font-size:clamp(68px,8vw,130px);font-weight:1000;letter-spacing:-.08em;line-height:.82;text-align:center}
+.vertical span{font-size:18px;letter-spacing:.12em;margin-top:24px}
+.machine{border:3px solid var(--cream);padding:18px;position:relative}
+.machine:before,.machine:after{content:"";position:absolute;width:28px;height:28px;border:3px solid var(--cream);background:var(--blue)}
+.machine:before{left:-3px;top:-3px}.machine:after{right:-3px;bottom:-3px}
+.display{border:2px solid var(--cream);display:grid;grid-template-columns:1.3fr 1fr;min-height:170px}
+.scope{position:relative;overflow:hidden;border-right:2px solid var(--cream);display:grid;place-items:center}.scope svg{width:92%;height:110px}.scope path{fill:none;stroke:var(--cream);stroke-width:3}.readout{padding:16px;font-weight:900}.readout h2{font-size:32px;margin:5px 0}.readout p{font-size:11px;line-height:1.45;margin:0}
+.console{display:grid;grid-template-columns:220px 1fr 220px;gap:18px;margin-top:18px}
+.channel{border:2px solid var(--cream);padding:12px}.channel h3{font-size:22px;margin:0 0 3px}.channel small{font-size:9px;font-weight:900;letter-spacing:.12em}
+label{display:block;font-size:9px;font-weight:900;letter-spacing:.12em;margin:13px 0 5px}
+input[type=range]{width:100%;accent-color:var(--cream)}
+.wavebuttons{display:grid;grid-template-columns:1fr 1fr;gap:5px}.wavebuttons button{border:2px solid var(--cream);background:transparent;color:var(--cream);padding:6px;font-size:9px;font-weight:900;cursor:pointer}.wavebuttons button.on{background:var(--cream);color:var(--blue)}
+.deck{min-width:0;display:grid;place-items:center}.platter{width:min(480px,43vw);aspect-ratio:1;border:7px solid var(--cream);border-radius:50%;position:relative;display:grid;place-items:center;cursor:pointer}.platter:before,.platter:after{content:"";position:absolute;border:2px solid var(--cream);border-radius:50%}.platter:before{inset:10%}.platter:after{inset:28%}.hub{width:20%;aspect-ratio:1;border:14px solid var(--cream);border-radius:50%}.tickring{position:absolute;inset:-16px;border:2px dotted var(--cream);border-radius:50%}.platter.spin{animation:spin 4s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.transport{display:flex;gap:10px;margin-top:14px}.transport button{width:62px;height:62px;border:3px solid var(--cream);border-radius:50%;background:transparent;color:var(--cream);font-weight:1000;cursor:pointer}.transport button:hover{background:var(--cream);color:var(--blue)}
+.seq{margin-top:18px;border-top:2px solid var(--cream);padding-top:14px}.steps{display:grid;grid-template-columns:repeat(16,1fr);gap:5px}.step{height:26px;border:2px solid var(--cream);cursor:pointer}.step.on,.step.now{background:var(--cream)}
+.footer{display:flex;justify-content:space-between;gap:20px;border-top:2px dashed var(--cream);margin-top:18px;padding-top:12px;font-weight:900;font-size:11px;letter-spacing:.08em}
+.status{font-weight:1000}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.vertical{writing-mode:initial;transform:none;font-size:64px}.console{grid-template-columns:1fr}.deck{order:-1}.platter{width:min(480px,75vw)}.display{grid-template-columns:1fr}.scope{border-right:0;border-bottom:2px solid var(--cream)}}
+</style>
+</head>
+<body>
+<div class="shell"><div class="dash">
+<header class="top"><div class="brand">NW / SOUND SYSTEM 04</div><small>MUSIC · SIGNAL · COMMUNITY</small><button class="power" id="power">PLAY</button></header>
+<div class="layout">
+<aside class="vertical">NEON WAVE <span>// BLUEPRINT SYNTH</span></aside>
+<main class="machine">
+<section class="display"><div class="scope"><svg viewBox="0 0 600 120"><path id="wavepath" d="M0 60 L600 60"/></svg></div><div class="readout"><small>INTERACTIVE SOUND WORKSHOP / UNIT 04</small><h2 id="voiceName">BASS / PULSE / GLASS</h2><p>THREE VOICE WEB AUDIO SYNTHESIZER. ADJUST THE SIGNAL MODULES, SELECT A WAVEFORM AND START THE CENTRAL DECK.</p></div></section>
+<section class="console">
+<div id="leftChannels"></div>
+<div class="deck"><div class="platter" id="platter"><div class="tickring"></div><div class="hub"></div></div><div class="transport"><button id="stop">■</button><button id="play">▶</button></div><b style="margin-top:10px">ALL TOGETHER NOW / SYNTH DECK</b></div>
+<div id="rightChannels"></div>
+</section>
+<section class="seq"><small>SEQUENCE / 16 STEP SIGNAL MAP</small><div class="steps" id="steps"></div></section>
+<div class="footer"><span>NEON WAVE / DIGITAL INSTRUMENT / 2026</span><span class="status" id="status">READY — PRESS PLAY</span></div>
+</main></div></div></div>
+<script>
+const AC=window.AudioContext||window.webkitAudioContext;let ctx,master,timer=null,pos=0,playing=false;
+const voices=[
+{name:"BASS",sub:"LOW FREQUENCY UNIT",wave:"sawtooth",gain:.12,cutoff:650,notes:[55,55,65.41,73.42,49,55,82.41,65.41]},
+{name:"PULSE",sub:"RHYTHM SIGNAL UNIT",wave:"square",gain:.055,cutoff:1700,notes:[220,261.63,293.66,261.63,329.63,293.66,261.63,196]},
+{name:"GLASS",sub:"HIGH AIR SIGNAL",wave:"sine",gain:.045,cutoff:4800,notes:[659.25,783.99,880,987.77,880,783.99,698.46,587.33]}];
+function init(){if(!ctx){ctx=new AC();master=ctx.createGain();master.gain.value=.8;master.connect(ctx.destination)}if(ctx.state==="suspended")ctx.resume()}
+function hit(freq,v,d=.25){init();let t=ctx.currentTime,o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.type=v.wave;o.frequency.value=freq;f.type="lowpass";f.frequency.value=v.cutoff;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v.gain,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(f).connect(g).connect(master);o.start(t);o.stop(t+d+.02)}
+function channel(v){let e=document.createElement("div");e.className="channel";e.innerHTML=`<h3>${v.name}</h3><small>${v.sub}</small><label>LEVEL</label><input type="range" min=".01" max=".22" step=".005" value="${v.gain}" data-k="gain"><label>FILTER</label><input type="range" min="250" max="6000" step="10" value="${v.cutoff}" data-k="cutoff"><label>WAVEFORM</label><div class="wavebuttons">${["sine","triangle","square","sawtooth"].map(w=>`<button data-w="${w}" class="${w==v.wave?"on":""}">${w}</button>`).join("")}</div>`;e.querySelectorAll("input").forEach(x=>x.oninput=()=>v[x.dataset.k]=+x.value);e.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{v.wave=b.dataset.w;e.querySelectorAll("[data-w]").forEach(q=>q.classList.toggle("on",q===b));drawWave(v.wave)});return e}
+leftChannels.append(channel(voices[0]));rightChannels.append(channel(voices[1]));rightChannels.append(channel(voices[2]));
+const stepEls=[];for(let i=0;i<16;i++){let s=document.createElement("div");s.className="step"+([0,3,4,7,8,10,12,15].includes(i)?" on":"");steps.append(s);stepEls.push(s)}
+function tick(){voices.forEach(v=>hit(v.notes[pos%v.notes.length],v));stepEls.forEach((e,i)=>e.classList.toggle("now",i===pos%16));pos++}
+function start(){init();if(playing)return;playing=true;platter.classList.add("spin");tick();timer=setInterval(tick,285);status.textContent="SIGNAL RUNNING / 105 BPM";power.textContent="STOP"}
+function halt(){playing=false;clearInterval(timer);timer=null;platter.classList.remove("spin");stepEls.forEach(e=>e.classList.remove("now"));status.textContent="SIGNAL STOPPED";power.textContent="PLAY"}
+play.onclick=start;platter.onclick=start;stop.onclick=halt;power.onclick=()=>playing?halt():start;
+function drawWave(type){let pts=[];for(let x=0;x<=600;x+=4){let a=x/600*Math.PI*8,y=60;if(type==="sine")y=60+32*Math.sin(a);if(type==="square")y=60+30*(Math.sin(a)>=0?1:-1);if(type==="triangle")y=60+30*(2/Math.PI)*Math.asin(Math.sin(a));if(type==="sawtooth")y=60+30*(2*((a/(2*Math.PI))-Math.floor(.5+a/(2*Math.PI))));pts.push((x?"L":"M")+x+" "+y)}wavepath.setAttribute("d",pts.join(" "))}
+drawWave("sine");
+</script>
+</body></html>
