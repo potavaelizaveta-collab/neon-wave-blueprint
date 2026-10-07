@@ -23,14 +23,7 @@ Sound Sketch — интерактивный музыкальный инстру�
 
 ## Запуск
 
-Требуется Ruby версии, указанной в Gemfile, и Bundler.
-
-```powershell
-bundle install
-bundle exec rails server
-```
-
-Открыть http://localhost:3000 и нажать PLAY. Звук включается после нажатия пользователя.
+Открыть http://localhost:3000 и нажать PLAY.
 
 ## Структура инструмента
 
