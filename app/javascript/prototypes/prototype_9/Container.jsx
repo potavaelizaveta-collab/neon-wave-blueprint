@@ -70,18 +70,18 @@ export default class Container extends Component {
 
   render() {
     const { firstSettings, secondSettings, thirdSettings, playing } = this.state
-    return <main className="neon_wave">
-      <header className="nw_header">
-        <div className="mark">NW</div><b>NEON WAVE</b><span>THREE VOICE LOOP SYNTH / TONE.JS</span>
+    return <main className="sound_sketch">
+      <header className="ss_header">
+        <div className="mark">SS</div><b>Sound Sketch</b><span>THREE VOICE LOOP SYNTH / TONE.JS</span>
         <SC_Button text={playing ? 'STOP' : 'PLAY'} handleClick={this.handleStart} />
       </header>
-      <section className="hero"><div><small>DIGITAL SOUND OBJECT / 2026</small><h1>NEON<br/><em>WAVE</em></h1></div><p>Three independent voices form one shifting electronic loop. Change the oscillator, volume, glide, detune and phase while it plays.</p></section>
+      <section className="hero"><div><small>DIGITAL SOUND OBJECT / 2026</small><h1>SOUND<br/><em>SKETCH</em></h1></div><p>Three independent voices form one shifting electronic loop. Change the oscillator, volume, glide, detune and phase while it plays.</p></section>
       <section className="voices">
         {this.renderVoice('BASS','LOW / WARM / HEAVY',firstSettings,0)}
         {this.renderVoice('PULSE','MID / RHYTHMIC / SHARP',secondSettings,1)}
         {this.renderVoice('GLASS','HIGH / AIRY / BRIGHT',thirdSettings,2)}
       </section>
-      <footer><span>NEON WAVE</span><span>WEB AUDIO EXPERIMENT</span><span>2026</span></footer>
+      <footer><span>Sound Sketch</span><span>WEB AUDIO EXPERIMENT</span><span>2026</span></footer>
     </main>
   }
 }
